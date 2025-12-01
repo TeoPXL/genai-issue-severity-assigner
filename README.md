@@ -1,0 +1,1 @@
+# genai-issue-severity-assigner
