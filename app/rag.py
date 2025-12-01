@@ -4,7 +4,7 @@ from vectorstore import VectorStore
 
 
 
-def retrieve_context(query: str, store: VectorStore, k=3):
+def retrieve_context(query: str, store: VectorStore, k=5):
     q_emb = embed_text(query)
     results = store.search(q_emb, k)
     formatted = []

@@ -141,6 +141,7 @@ Avoid extreme outliers unless the evidence is overwhelming.
 2. Read the "Perspectives" provided by 5 different agents.
 3. Rank the top 3 perspectives (1st, 2nd, 3rd).
 4. Return a JSON list of the INDICES of the top 3 perspectives (0-indexed).
+5. DO NOT provide any explanation or text outside the JSON.
 
 ### JSON Schema
 [first_place_index, second_place_index, third_place_index]

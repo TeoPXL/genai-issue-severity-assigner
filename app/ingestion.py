@@ -8,9 +8,11 @@ DATA_PATH = os.getenv("DATA_PATH", "/data/tickets.csv")
 
 
 PRIORITY_MAP = {
-'low': 'low',
-'medium': 'medium',
-'high': 'high'
+    'very_low': 'low',
+    'low': 'low',
+    'medium': 'medium',
+    'high': 'high',
+    'critical': 'high'
 }
 
 

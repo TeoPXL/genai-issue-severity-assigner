@@ -49,19 +49,13 @@ def agent_rank(text: str, perspectives: list, system_prompt: str):
     try:
         parsed = json.loads(resp)
     except Exception:
-         # fallback: find first '[' and use raw_decode
-        start_idx = resp.find('[')
-        if start_idx != -1:
-            try:
-                parsed, _ = json.JSONDecoder().raw_decode(resp[start_idx:])
-            except Exception:
-                 # If list parsing fails, try to find numbers
-                import re
-                nums = re.findall(r'\d+', resp)
-                parsed = [int(n) for n in nums[:3]]
+        # fallback: use regex to find a list of 3 integers
+        import re
+        match = re.search(r'\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]', resp)
+        if match:
+            parsed = [int(match.group(1)), int(match.group(2)), int(match.group(3))]
         else:
-             # If no list found, try to find numbers
-            import re
+            # Last resort: find all numbers and take first 3
             nums = re.findall(r'\d+', resp)
             parsed = [int(n) for n in nums[:3]]
             

@@ -39,26 +39,31 @@ def run_batch(n=10, data_path=None):
         print(f"Clearing vector store at {VECTORSTORE_PATH}")
         os.remove(VECTORSTORE_PATH)
         
-    # Select 1 example for each severity
+    # Select up to 5 examples of each severity for "few-shot" seeding
+    # We will use these to populate the vector store initially so the agent has something to retrieve.
     seed_indices = []
-    severities_found = set()
-    
-    # We want low, medium, high. 'Other' maps to medium usually.
+    found_counts = {'low': 0, 'medium': 0, 'high': 0}
     target_severities = ['low', 'medium', 'high']
+    max_examples_per_severity = 10
+    
+    # We'll iterate and pick the first `max_examples_per_severity` we find for each severity
+    # In a real scenario, you might want curated examples.
     
     for index, row in df.iterrows():
         priority = str(row.get('priority', 'Other')).lower()
         severity = PRIORITY_MAP.get(priority, 'medium')
         
-        if severity in target_severities and severity not in severities_found:
+        if severity in target_severities and found_counts[severity] < max_examples_per_severity:
             seed_indices.append(index)
-            severities_found.add(severity)
+            found_counts[severity] += 1
         
-        if len(severities_found) == len(target_severities):
+        if all(count >= max_examples_per_severity for count in found_counts.values()):
             break
             
     if not seed_indices:
-        print("Warning: Could not find examples for all severities.")
+        print("Warning: Could not find any examples for seeding.")
+    elif any(count < max_examples_per_severity for count in found_counts.values()):
+        print(f"Warning: Could not find {max_examples_per_severity} examples for all severities. Found: {found_counts}")
 
     # Ingest seeds
     seed_rows = df.loc[seed_indices]
@@ -114,7 +119,7 @@ def run_batch(n=10, data_path=None):
         
         # Predict
         try:
-            vote_res = multi_agent_vote(text)
+            vote_res = multi_agent_vote(text, n_agents=5)
             predicted_severity = vote_res['severity']
             confidence = vote_res['confidence']
             rationale = vote_res.get('votes', [{}])[0].get('rationale', 'No rationale provided')
