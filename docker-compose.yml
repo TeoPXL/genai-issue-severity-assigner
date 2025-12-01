@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+severity_app:
+build: ./app
+container_name: severity_app
+environment:
+  - GENESIS_API=http://ai.genesis.live/api/chat/completions
+  - GENESIS_EMBED=http://ai.genesis.live/ollama/api/embed
+  - GENESIS_MODEL=llama:latest
+  - VECTORSTORE_PATH=/data/vectorstore.pkl
+  - DATA_PATH=/data/tickets.csv
+volumes:
+  - ./data:/data
+  - ./app:/app
+env_file:
+  - .env
+ports:
+  - "8000:8000"
+command: [ "/app/start.sh" ]
