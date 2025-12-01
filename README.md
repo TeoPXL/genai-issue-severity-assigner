@@ -28,6 +28,8 @@ This mechanism filters out hallucinations and extreme outliers, ensuring a robus
 
 **Multi-Agent Consensus System with RAG-enhanced Context Injection**.*
 
+![System Diagram](media/diagram.webp)
+
 Here is the exact flow:
 
 1.  **Vector Ingestion**: We ingest historical tickets into a FAISS vector store, embedding them to capture semantic meaning. We specifically seed the store with balanced examples (10 per severity level) to ensure the model has a diverse reference set.
