@@ -26,7 +26,7 @@ This mechanism filters out hallucinations and extreme outliers, ensuring a robus
 
 ## 🧠 Methodology: Under the Hood
 
-*If I were explaining this system in a technical interview, I would describe it as a **Multi-Agent Consensus System with RAG-enhanced Context Injection**.*
+**Multi-Agent Consensus System with RAG-enhanced Context Injection**.*
 
 Here is the exact flow:
 
